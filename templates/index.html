@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Price Prediction</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Stock Price Prediction</h1>
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="ticker">Stock Ticker:</label>
+                <select class="form-control" id="ticker" name="ticker">
+                    <option value="AAPL">Apple (AAPL)</option>
+                    <option value="MSFT">Microsoft (MSFT)</option>
+                    <option value="GOOG">Google (GOOG)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Predict</button>
+        </form>
+        <h2 class="mt-5" id="result"></h2>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#predictionForm').on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/predict',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        var result = '<h2>Predicted Prices for ' + data.ticker + ':</h2><ul>';
+                        data.predictions.forEach(function (price, index) {
+                            result += '<li>Day ' + (index + 1) + ': $' + price.toFixed(2) + '</li>';
+                        });
+                        result += '</ul>';
+                        $('#result').html(result);
+                    },
+                    error: function (error) {
+                        $('#result').html('<p class="text-danger">Error: ' + error.responseJSON.error + '</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
