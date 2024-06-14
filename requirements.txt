@@ -11,6 +11,7 @@ frozendict==2.4.4
 gast==0.5.4
 google-pasta==0.2.0
 grpcio==1.64.1
+gunicorn==22.0.0
 h5py==3.11.0
 html5lib==1.1
 idna==3.7
